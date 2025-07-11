@@ -1,0 +1,116 @@
+app-id: com.blizzard.Battlenet
+# branch: testing                        # Set branch for testing purposes (Default branch is master)
+sdk: org.winestaging.Sdk
+runtime: org.winestaging.Platform
+runtime-version: '10.10'
+# rename-desktop-file: Battlenet.desktop # Not needed because desktop file is already named com.blizzard.Battlenet
+# rename-icon: Battlenet                 # Not needed because icons are already named com.blizzard.Battlenet
+command: Battlenet.sh
+finish-args:
+  - --allow=multiarch                                      # Access to 32bit libraries (For running 32bit executables)
+  # - --allow=devel                                          # Uses full SDK as the runtime (Access to more debugging tools and other libs)
+  # - --allow=bluetooth                                      # Access to bluetooth
+  # - --device=all                                           # Access to all devices
+  - --device=dri                                           # Access to DRI for OpenGL rendering
+  - --device=input                                         # Access to input devices (Controllers, etc)
+  # - --socket=wayland                                       # Access to Wayland socket for display
+  - --socket=fallback-x11                                  # Access to X11 socket for display (Incase wayland doesn't work)
+  - --socket=pulseaudio                                    # Access to pulse audio socket for sound
+  - --share=network                                        # Access to networking
+  - --share=ipc                                            # Access to host IPC namespace
+  - --talk-name=org.freedesktop.ScreenSaver                # Can talk to Screensaver (Allows preventing Screensaver)
+  # - --system-talk-name=org.freedesktop.UDisks2             # Can manage storage devices directly
+  # - --system-talk-name=org.freedesktop.NetworkManager      # Can manage network directly
+  # - --filesystem=host:ro                                   # Read access to common host directories
+  - --filesystem=xdg-run/app/com.discordapp.Discord:create # Read/write access to Discord's running instance (Required for setting up Discord rich presence)
+  # - --filesystem=xdg-run/discord-ipc-0:create              # Read/Write access to Discord's IPC socket (Required for setting up Discord rich presence)
+  - --filesystem=xdg-run/gamescope-0:ro                    # Read access to Gamescope's running instance (Required for Gamescope on Steam Deck)
+  # - --env=WINEARCH=win32                                   # Set Wine to 32bit mode (64bit mode is default)
+  - --env=WINEPREFIX=/var/data/wine                        # Set prefix location
+inherit-extensions:
+  - org.freedesktop.Platform.Compat.i386       # 32bit Linux compatibility
+  - org.freedesktop.Platform.Compat.i386.Debug # 32bit Linux compatibility debug
+  - org.freedesktop.Platform.GL                # OpenGL
+  - org.freedesktop.Platform.GL32              # 32bit OpenGL
+  - org.freedesktop.Platform.GL32.Debug        # 32bit OpenGL Debug
+  - org.freedesktop.Platform.VAAPI.Intel       # Intel VAAPI
+  - org.freedesktop.Platform.VAAPI.Intel.i386  # 32bit Intel VAAPI
+  - org.freedesktop.Platform.ffmpeg-full       # FFmpeg
+  - org.freedesktop.Platform.ffmpeg_full.i386  # 32bit FFmpeg
+modules:
+  # Setting up required stuff
+  - name: Setup
+    buildsystem: simple
+    build-commands:
+      - |
+        # Make directories needed by extensions
+        mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu                        # 32bit Linux compatibility
+        mkdir -p ${FLATPAK_DEST}/lib/debug/lib/i386-linux-gnu              # 32bit Linux compatibility debug
+        mkdir -p ${FLATPAK_DEST}/lib/x86_64-linux-gnu/GL                   # OpenGL
+        mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu/GL                     # 32bit OpenGL
+        mkdir -p ${FLATPAK_DEST}/lib/debug/lib/i386-linux-gnu/GL           # 32bit OpenGL Debug
+        mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu/dri/intel-vaapi-driver # 32bit Intel VAAPI
+        mkdir -p ${FLATPAK_DEST}/lib/ffmpeg                                # FFmpeg
+        mkdir -p ${FLATPAK_DEST}/lib32/ffmpeg                              # 32bit FFmpeg
+        mkdir -p ${FLATPAK_DEST}/extensions
+
+        mkdir -p ${FLATPAK_DEST}/bin                                                                               # Make directory needed for binaries
+        mkdir -p ${FLATPAK_DEST}/share/applications/                                                               # Make directory for desktop files
+        mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/{16x16,24x24,32x32,48x48,64x64,128x128,256x256,scalable}/apps # Make directories needed for icons
+
+  - name: Battle.net
+    sources:
+      # Battle.net setup exe to be ran with Wine (Downloaded to /app/extra when user is installing because of extra-data)
+      - type: extra-data
+        url: https://www.battle.net/download/getInstallerForGame?os=win&version=LIVE&gameProgram=BATTLENET_APP
+        sha256: a54baa4ff5696b465b47646f49d9a3afab9a72fa21005b2b71676a5b01c87d25
+        size: 4889744
+        filename: BattlenetSetup.exe
+
+      # Script that is automatically ran when user is installing, after extra-data is downloaded
+      - type: script
+        dest-filename: apply_extra
+        commands:
+          - |
+            wrestool -x --output=Battlenet.ico -t14 BattlenetSetup.exe # Extract ico from exe (Uses Icoutils module from org.winestaging.Sdk)
+            magick Battlenet.ico Battlenet.png                         # Convert ico to png (Uses ImageMagick module from org.winestaging.Sdk)
+            # magick Battlenet.ico Battlenet.svg                         # Convert ico to svg
+
+            # Install icons to appropriate directories
+            install -Dm644 Battlenet-0.png ./export/share/icons/hicolor/128x128/apps/com.blizzard.Battlenet.png
+            install -Dm644 Battlenet-1.png ./export/share/icons/hicolor/16x16/apps/com.blizzard.Battlenet.png
+            install -Dm644 Battlenet-2.png ./export/share/icons/hicolor/24x24/apps/com.blizzard.Battlenet.png
+            install -Dm644 Battlenet-3.png ./export/share/icons/hicolor/256x256/apps/com.blizzard.Battlenet.png
+            install -Dm644 Battlenet-4.png ./export/share/icons/hicolor/32x32/apps/com.blizzard.Battlenet.png
+            install -Dm644 Battlenet-5.png ./export/share/icons/hicolor/48x48/apps/com.blizzard.Battlenet.png
+            install -Dm644 Battlenet-6.png ./export/share/icons/hicolor/64x64/apps/com.blizzard.Battlenet.png
+            # install -Dm644 Battlenet.svg ./export/share/icons/hicolor/scalable/apps/com.blizzard.Battlenet.svg
+
+      # Windows registry file that sets Wine not to lose focus of cursor when clicking outside of the window (needed for Hearthstone)
+      - type: file
+        path: Registry/WineGraphics.reg
+
+      # Script that is ran everytime the final Flatpak starts
+      - type: file
+        path: Scripts/Battlenet.sh
+
+      # Placeholder icon (For storefront metadata) (Will be replaced with extracted/converted Battle.net image when user installs)
+      - type: file
+        path: Icons/com.blizzard.Battlenet.png
+
+      - type: file
+        path: DesktopEntries/com.blizzard.Battlenet.desktop
+
+      - type: file
+        path: com.blizzard.Battlenet.metainfo.xml
+    buildsystem: simple
+    build-commands:
+      - |
+        ln -s ${FLATPAK_DEST}/extra/BattlenetSetup.exe ${FLATPAK_DEST}/bin/BattlenetSetup.exe          # Symlink to BattlenetSetup.exe that will be downloaded to /app/extra when user installs
+        install -Dm744 apply_extra -t ${FLATPAK_DEST}/bin/                                             # Install script that will be ran automatically when user installs after extra-data sources are downloaded
+        install -Dm644 WineGraphics.reg -t ${FLATPAK_DEST}/share/                                      # Install Windows registry keys that will be applied to Wine prefix
+        install -Dm744 Battlenet.sh -t ${FLATPAK_DEST}/bin/                                            # Install script that will act as the launch command when the Flatpak it is ran
+        install -Dm644 com.blizzard.Battlenet.png -t ${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/ # Install placeholder icon (Will be replaced with extracted/converted Battle.net image when user installs)
+        install -Dm644 com.blizzard.Battlenet.desktop -t ${FLATPAK_DEST}/share/applications/           # Install desktop file that will be exported for desktop environments to use in their App menus
+        install -Dm644 com.blizzard.Battlenet.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/          # Install metainfo file
+
