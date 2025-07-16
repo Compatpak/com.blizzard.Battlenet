@@ -56,7 +56,7 @@ modules:
 
         mkdir -p ${FLATPAK_DEST}/bin                                                                               # Make directory needed for binaries
         mkdir -p ${FLATPAK_DEST}/share/applications/                                                               # Make directory for desktop files
-        mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/{16x16,24x24,32x32,48x48,64x64,128x128,256x256,scalable}/apps # Make directories needed for icons
+        mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/{16x16,24x24,32x32,48x48,64x64,128x128,256x256,512x512,scalable}/apps # Make directories needed for icons
 
   - name: Battle.net
     sources:
@@ -97,9 +97,9 @@ modules:
       - type: file
         path: Scripts/Battlenet.sh
 
-      # Placeholder icon (For storefront metadata) (Will be replaced with extracted/converted Battle.net image when user installs)
-      - type: file
-        path: Icons/com.blizzard.Battlenet.png
+      # Placeholder icons (For storefront metadata) (Will be replaced with extracted/converted icon from executable when user installs)
+      - type: dir
+        path: Icons
 
       - type: file
         path: DesktopEntries/com.blizzard.Battlenet.desktop
@@ -109,11 +109,17 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-        ln -s ${FLATPAK_DEST}/extra/BattlenetSetup.exe ${FLATPAK_DEST}/bin/BattlenetSetup.exe          # Symlink to BattlenetSetup.exe that will be downloaded to /app/extra when user installs
-        install -Dm744 apply_extra -t ${FLATPAK_DEST}/bin/                                             # Install script that will be ran automatically when user installs after extra-data sources are downloaded
-        install -Dm644 WineGraphics.reg -t ${FLATPAK_DEST}/share/                                      # Install Windows registry keys that will be applied to Wine prefix
-        install -Dm744 Battlenet.sh -t ${FLATPAK_DEST}/bin/                                            # Install script that will act as the launch command when the Flatpak it is ran
-        install -Dm644 com.blizzard.Battlenet.png -t ${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/ # Install placeholder icon (Will be replaced with extracted/converted Battle.net image when user installs)
-        install -Dm644 com.blizzard.Battlenet.desktop -t ${FLATPAK_DEST}/share/applications/           # Install desktop file that will be exported for desktop environments to use in their App menus
-        install -Dm644 com.blizzard.Battlenet.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/          # Install metainfo file
+        ln -s ${FLATPAK_DEST}/extra/BattlenetSetup.exe ${FLATPAK_DEST}/bin/BattlenetSetup.exe                                               # Symlink to executable that will be downloaded to /app/extra when user installs
+        install -Dm744 apply_extra -t ${FLATPAK_DEST}/bin/                                                                                  # Install script that will be ran automatically when user installs after extra-data sources are downloaded
+        install -Dm644 WineGraphics.reg -t ${FLATPAK_DEST}/share/                                                                           # Install Windows registry keys that will be applied to Wine prefix
+        install -Dm744 Battlenet.sh -t ${FLATPAK_DEST}/bin/                                                                                 # Install script that will act as the launch command when the Flatpak it is ran
+        install -Dm644 CompatpakSmoothBattlenetBlack16x16.png ${FLATPAK_DEST}/share/icons/hicolor/16x16/apps/com.blizzard.Battlenet.png     # Install placeholder icon (Will be replaced with extracted/converted icon from executable when user installs)
+        install -Dm644 CompatpakSmoothBattlenetBlack24x24.png ${FLATPAK_DEST}/share/icons/hicolor/24x24/apps/com.blizzard.Battlenet.png     # Install placeholder icon (Will be replaced with extracted/converted icon from executable when user installs)
+        install -Dm644 CompatpakSmoothBattlenetBlack32x32.png ${FLATPAK_DEST}/share/icons/hicolor/32x32/apps/com.blizzard.Battlenet.png     # Install placeholder icon (Will be replaced with extracted/converted icon from executable when user installs)
+        install -Dm644 CompatpakSmoothBattlenetBlack48x48.png ${FLATPAK_DEST}/share/icons/hicolor/48x48/apps/com.blizzard.Battlenet.png     # Install placeholder icon (Will be replaced with extracted/converted icon from executable when user installs)
+        install -Dm644 CompatpakSmoothBattlenetBlack64x64.png ${FLATPAK_DEST}/share/icons/hicolor/64x64/apps/com.blizzard.Battlenet.png     # Install placeholder icon (Will be replaced with extracted/converted icon from executable when user installs)
+        install -Dm644 CompatpakSmoothBattlenetBlack128x128.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/com.blizzard.Battlenet.png # Install placeholder icon (Will be replaced with extracted/converted icon from executable when user installs)
+        install -Dm644 CompatpakSmoothBattlenetBlack256x256.png ${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/com.blizzard.Battlenet.png # Install placeholder icon (Will be replaced with extracted/converted icon from executable when user installs)
+        install -Dm644 com.blizzard.Battlenet.desktop -t ${FLATPAK_DEST}/share/applications/                                                # Install desktop file that will be exported for desktop environments to use in their App menus
+        install -Dm644 com.blizzard.Battlenet.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/                                               # Install metainfo file
 
