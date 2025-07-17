@@ -2,13 +2,13 @@
 <!-- Copyright 2025 Compatpak -->
 <component type="desktop-application">
   <id>com.blizzard.Battlenet</id>
-  <metadata_license>FSFAP</metadata_license>
+  <metadata_license>CC-BY-SA-3.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   <name>Battle.net</name>
   <summary>Game Launcher</summary>
 
   <developer id="io.github">
-    <name>Chris Hobday</name>
+    <name>Compatpak</name>
   </developer>
 
   <description>
@@ -117,27 +117,27 @@
   <screenshots>
     <screenshot type="default">
       <caption>Battle.net Home</caption>
-      <image>https://raw.githubusercontent.com/Compatpak/com.blizzard.Battlenet/Screenshots/BattlenetHome.png</image>
+      <image>https://github.com/Compatpak/com.blizzard.Battlenet/blob/main/Screenshots/BattlenetHome.png?raw=true</image>
     </screenshot>
     <screenshot>
       <caption>Battle.net Games</caption>
-      <image>https://raw.githubusercontent.com/Compatpak/com.blizzard.Battlenet/Screenshots/BattlenetGames.png</image>
+      <image>https://github.com/Compatpak/com.blizzard.Battlenet/blob/main/Screenshots/BattlenetGames.png?raw=true</image>
     </screenshot>
     <screenshot>
       <caption>Battle.net Shop</caption>
-      <image>https://raw.githubusercontent.com/Compatpak/com.blizzard.Battlenet/Screenshots/BattlenetShop.png</image>
+      <image>https://github.com/Compatpak/com.blizzard.Battlenet/blob/main/Screenshots/BattlenetShop.png?raw=true</image>
     </screenshot>
     <screenshot>
       <caption>World of Warcraft Classic</caption>
-      <image>https://raw.githubusercontent.com/Compatpak/com.blizzard.Battlenet/Screenshots/WorldOfWacraftClassic.png</image>
+      <image>https://github.com/Compatpak/com.blizzard.Battlenet/blob/main/Screenshots/WorldOfWacraftClassic.png?raw=true</image>
     </screenshot>
     <screenshot>
       <caption>Hearthstone</caption>
-      <image>https://raw.githubusercontent.com/Compatpak/com.blizzard.Battlenet/Screenshots/Hearthstone.png</image>
+      <image>https://github.com/Compatpak/com.blizzard.Battlenet/blob/main/Screenshots/Hearthstone.png?raw=true</image>
     </screenshot>
     <screenshot>
       <caption>Warcraft Rumble</caption>
-      <image>https://raw.githubusercontent.com/Compatpak/com.blizzard.Battlenet/Screenshots/WarcraftRumble.png</image>
+      <image>https://github.com/Compatpak/com.blizzard.Battlenet/blob/main/Screenshots/WarcraftRumble.png?raw=true</image>
     </screenshot>
   </screenshots>
 
