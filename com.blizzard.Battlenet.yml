@@ -3,8 +3,8 @@ app-id: com.blizzard.Battlenet
 sdk: org.winestaging.Sdk
 runtime: org.winestaging.Platform
 runtime-version: '10.10'
-# rename-desktop-file: Battlenet.desktop # Not needed because desktop file is already named com.blizzard.Battlenet
-# rename-icon: Battlenet                 # Not needed because icons are already named com.blizzard.Battlenet
+# rename-desktop-file: Battlenet.desktop # Not needed because desktop file is already in reversed domain name format
+# rename-icon: Battlenet                 # Not needed because icons are already in reversed domain name format
 command: Battlenet.sh
 finish-args:
   - --allow=multiarch                                      # Access to 32bit libraries (For running 32bit executables)
@@ -54,8 +54,8 @@ modules:
         mkdir -p ${FLATPAK_DEST}/lib32/ffmpeg                              # 32bit FFmpeg
         mkdir -p ${FLATPAK_DEST}/extensions
 
-        mkdir -p ${FLATPAK_DEST}/bin                                                                               # Make directory needed for binaries
-        mkdir -p ${FLATPAK_DEST}/share/applications/                                                               # Make directory for desktop files
+        mkdir -p ${FLATPAK_DEST}/bin                                                                                       # Make directory needed for binaries
+        mkdir -p ${FLATPAK_DEST}/share/applications/                                                                       # Make directory for desktop files
         mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/{16x16,24x24,32x32,48x48,64x64,128x128,256x256,512x512,scalable}/apps # Make directories needed for icons
 
   - name: Battle.net
