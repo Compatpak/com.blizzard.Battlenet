@@ -13,9 +13,9 @@ finish-args:
   # - --device=all                                           # Access to all devices
   - --device=dri                                           # Access to DRI for OpenGL rendering
   - --device=input                                         # Access to input devices (Controllers, etc)
-  # - --socket=x11                                           # Access to X11 socket for display
+  - --socket=x11                                           # Access to X11 socket for display
   # - --socket=wayland                                       # Access to Wayland socket for display
-  - --socket=fallback-x11                                  # Access to X11 socket for display (Incase wayland doesn't work)
+  # - --socket=fallback-x11                                  # Access to X11 socket for display (Incase wayland doesn't work)
   - --socket=pulseaudio                                    # Access to pulse audio socket for sound
   - --share=network                                        # Access to networking
   - --share=ipc                                            # Access to host IPC namespace
