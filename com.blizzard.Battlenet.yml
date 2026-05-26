@@ -13,6 +13,7 @@ finish-args:
   # - --device=all                                           # Access to all devices
   - --device=dri                                           # Access to DRI for OpenGL rendering
   - --device=input                                         # Access to input devices (Controllers, etc)
+  # - --socket=x11                                           # Access to X11 socket for display
   # - --socket=wayland                                       # Access to Wayland socket for display
   - --socket=fallback-x11                                  # Access to X11 socket for display (Incase wayland doesn't work)
   - --socket=pulseaudio                                    # Access to pulse audio socket for sound
@@ -122,4 +123,3 @@ modules:
         install -Dm644 CompatpakSmoothBattlenetBlack256x256.png ${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/com.blizzard.Battlenet.png # Install placeholder icon (Will be replaced with extracted/converted icon from executable when user installs)
         install -Dm644 com.blizzard.Battlenet.desktop -t ${FLATPAK_DEST}/share/applications/                                                # Install desktop file that will be exported for desktop environments to use in their App menus
         install -Dm644 com.blizzard.Battlenet.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/                                               # Install metainfo file
-
