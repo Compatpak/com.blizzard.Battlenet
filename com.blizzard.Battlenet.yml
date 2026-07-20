@@ -24,7 +24,7 @@ finish-args:
   # - --system-talk-name=org.freedesktop.NetworkManager      # Can manage network directly
   # - --filesystem=host:ro                                   # Read access to common host directories
   - --filesystem=xdg-run/app/com.discordapp.Discord:create # Read/write access to Discord's running instance (Required for setting up Discord rich presence)
-  # - --filesystem=xdg-run/discord-ipc-0:create              # Read/Write access to Discord's IPC socket (Required for setting up Discord rich presence)
+  - --filesystem=xdg-run/discord-ipc-0:create              # Read/Write access to Discord's IPC socket (Required for setting up Discord rich presence)
   - --filesystem=xdg-run/gamescope-0:ro                    # Read access to Gamescope's running instance (Required for Gamescope on Steam Deck)
   # - --env=WINEARCH=win32                                   # Set Wine to 32bit mode (64bit mode is default)
   - --env=WINEPREFIX=/var/data/wine                        # Set prefix location
