@@ -9,10 +9,20 @@ echo "Updating registry"
 wine regedit /app/share/WineGraphics.reg
 sleep 3
 
+echo "Checking if RPC-Bridge is already installed"
+if [ -f "/var/data/wine/drive_c/windows/bridge.exe" ]; then
+  echo "RPC-Bridge is installed"
+
+  echo "Copying bridge.exe to make sure it's the latest version"
+  cp /bin/bridge.exe /var/data/wine/drive_c/windows/bridge.exe
+else
+  echo "Installing RPC-Bridge"
+  wine /bin/bridge.exe --install
+fi
+
 echo "Setting up Discord rich presence"
 for i in {0..9}; do
-    test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
-    ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+    test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
 done
 
 echo "Checking if Battle.net is already installed"
