@@ -1,8 +1,8 @@
 app-id: com.blizzard.Battlenet
 # branch: testing                        # Set branch for testing purposes (Default branch is master)
-sdk: org.winestaging.Sdk
-runtime: org.winestaging.Platform
-runtime-version: '10.10'
+sdk: org.wine.Sdk
+runtime: org.wine.Platform
+runtime-version: '11.22'
 # rename-desktop-file: Battlenet.desktop # Not needed because desktop file is already in reversed domain name format
 # rename-icon: Battlenet                 # Not needed because icons are already in reversed domain name format
 command: Battlenet.sh
@@ -29,15 +29,21 @@ finish-args:
   # - --env=WINEARCH=win32                                   # Set Wine to 32bit mode (64bit mode is default)
   - --env=WINEPREFIX=/var/data/wine                        # Set prefix location
 inherit-extensions:
-  - org.freedesktop.Platform.Compat.i386       # 32bit Linux compatibility
-  - org.freedesktop.Platform.Compat.i386.Debug # 32bit Linux compatibility debug
-  - org.freedesktop.Platform.GL                # OpenGL
-  - org.freedesktop.Platform.GL32              # 32bit OpenGL
-  - org.freedesktop.Platform.GL32.Debug        # 32bit OpenGL Debug
-  - org.freedesktop.Platform.VAAPI.Intel       # Intel VAAPI
-  - org.freedesktop.Platform.VAAPI.Intel.i386  # 32bit Intel VAAPI
-  - org.freedesktop.Platform.ffmpeg-full       # FFmpeg
-  - org.freedesktop.Platform.ffmpeg_full.i386  # 32bit FFmpeg
+  - org.freedesktop.Platform.GL           # OpenGL
+  - org.freedesktop.Platform.codecs-extra # Video codecs like H.264, H.265, etc
+# inherit-sdk-extensions:
+#   - org.freedesktop.Sdk.Extension
+# Re-export org.freedesktop.Platform extensions for child Apps to inherit
+add-extensions:
+  # Codecs (replaces ffmpeg-full & openh264)
+  org.freedesktop.Platform.codecs-extra:
+    directory: lib/codecs
+    add-ld-path: lib
+    version: 26.08-extra
+    no-autodownload: true
+    autodelete: false
+
+
 modules:
   # Setting up required stuff
   - name: Setup
@@ -45,15 +51,20 @@ modules:
     build-commands:
       - |
         # Make directories needed by extensions
-        # mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu                        # 32bit Linux compatibility
-        mkdir -p ${FLATPAK_DEST}/lib/debug/lib/i386-linux-gnu              # 32bit Linux compatibility debug
-        mkdir -p ${FLATPAK_DEST}/lib/x86_64-linux-gnu/GL                   # OpenGL
-        mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu/GL                     # 32bit OpenGL
-        mkdir -p ${FLATPAK_DEST}/lib/debug/lib/i386-linux-gnu/GL           # 32bit OpenGL Debug
-        mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu/dri/intel-vaapi-driver # 32bit Intel VAAPI
-        mkdir -p ${FLATPAK_DEST}/lib/ffmpeg                                # FFmpeg
-        mkdir -p ${FLATPAK_DEST}/lib32/ffmpeg                              # 32bit FFmpeg
-        mkdir -p ${FLATPAK_DEST}/extensions
+        mkdir -p ${FLATPAK_DEST}/lib/codecs # Codecs (replaces ffmpeg-full & openh264)
+
+        # Make docs directories needed by modules
+        mkdir -p ${FLATPAK_DEST}/share/runtime/docs/man  # /usr/share/man symlinks here but it is not created by default and can cause errors when building modules
+        mkdir -p ${FLATPAK_DEST}/share/runtime/docs/info # /usr/share/info symlinks here but it is not created by default and can cause errors when building modules
+        mkdir -p ${FLATPAK_DEST}/share/runtime/docs/doc  # /usr/share/doc symlinks here but it is not created by default and can cause errors when building modules
+        mkdir -p ${FLATPAK_DEST}/share/runtime/docs/ri   # /usr/share/ri symlinks here but it is not created by default and can cause errors when building modules
+
+        # Make locale directories needed by modules
+        pushd ${FLATPAK_DEST}/share/locale
+        for link in `find . -type l`; do
+          mkdir -p $(readlink  $link)
+        done
+        popd
 
         mkdir -p ${FLATPAK_DEST}/bin                                                                                       # Make directory needed for binaries
         mkdir -p ${FLATPAK_DEST}/share/applications/                                                                       # Make directory for desktop files
