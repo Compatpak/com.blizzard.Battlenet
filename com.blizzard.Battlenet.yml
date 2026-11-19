@@ -2,7 +2,7 @@ app-id: com.blizzard.Battlenet
 # branch: testing                        # Set branch for testing purposes (Default branch is master)
 sdk: org.winestaging.Sdk
 runtime: org.winestaging.Platform
-runtime-version: '11.22'
+runtime-version: '10.10'
 # rename-desktop-file: Battlenet.desktop # Not needed because desktop file is already in reversed domain name format
 # rename-icon: Battlenet                 # Not needed because icons are already in reversed domain name format
 command: Battlenet.sh
@@ -45,7 +45,7 @@ modules:
     build-commands:
       - |
         # Make directories needed by extensions
-        mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu                        # 32bit Linux compatibility
+        # mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu                        # 32bit Linux compatibility
         mkdir -p ${FLATPAK_DEST}/lib/debug/lib/i386-linux-gnu              # 32bit Linux compatibility debug
         mkdir -p ${FLATPAK_DEST}/lib/x86_64-linux-gnu/GL                   # OpenGL
         mkdir -p ${FLATPAK_DEST}/lib/i386-linux-gnu/GL                     # 32bit OpenGL
